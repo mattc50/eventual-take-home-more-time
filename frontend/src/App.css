@@ -54,6 +54,12 @@ body {
   color: #8F8F8F;
 }
 
+.display {
+  height: 40px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
 .prediction {
   margin-bottom: 12px;
 }
@@ -236,5 +242,15 @@ body {
   color: white;
   background: #16C64F;
   border-radius: 4px;
-  padding: 4px;
+  padding: 2px 6px;
+}
+
+.display-number-container {
+  display: inline-block;
+}
+
+.display-number {
+  display: block;
+  line-height: 40px;
+  text-align: right;
 }
