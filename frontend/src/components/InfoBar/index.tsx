@@ -34,6 +34,10 @@ const InfoBar = ({ premiumLock }) => {
     });
   };
 
+  const getEndYear = (date) => (
+    new Date(date).getFullYear() + 3
+  )
+
   return (
     <div className="card">
       <div className="display-data-container">
@@ -50,6 +54,8 @@ const InfoBar = ({ premiumLock }) => {
                 }
               ) || "---"}
             </span>
+            {/* double-check if this is the right implementation */}
+            {premiumLock.renewal_1_date && ` in ${getEndYear(premiumLock?.renewal_1_date)}` }
           </p>
         </div>
         <div className="display-data">
