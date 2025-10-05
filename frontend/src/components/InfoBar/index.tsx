@@ -11,19 +11,27 @@ const InfoBar = ({ premiumLock }) => {
 
   const getNextRenewal = () => {
     const dates = getRenewalDates();
-    console.log(premiumLock[`renewal_${premiumLock?.active_year}_date`]);
-    const year = new Date(premiumLock[`renewal_${premiumLock?.active_year}_date`]);
-    console.log(year);
-    if (year) {
-      for(let date of dates) {
+    console.log(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
+    const activeDate = new Date(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
+    console.log(activeDate);
+
+    let nextDate = null;
+    if (activeDate) {
+      for(const date of dates) {
         const d = new Date(date);
-        if(year < d) {
-          return date;
+        if(activeDate < d) {
+          nextDate = date;
         } else {
-          return year.toString();
+          nextDate = activeDate;
         }
       }
     }
+
+    return nextDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
   };
 
   return (
@@ -31,12 +39,21 @@ const InfoBar = ({ premiumLock }) => {
       <div className="display-data-container">
         <div className="display-data">
           <p className="display-label">Insurance Premiums Prediction</p>
-          {/* come back to this for the end date */}
-          <p className="display-value"><span className="prediction-value">{premiumLock?.premium_prediction || "---"}</span></p>
+          <p className="display-value">
+            <span className="prediction-value">
+              {premiumLock?.premium_prediction.toLocaleString(
+                'en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }
+              ) || "---"}
+            </span>
+          </p>
         </div>
         <div className="display-data">
           <p className="display-label">Next Insurance Renewal</p>
-          {/* come back to this for the end date */}
           <p className="display-value"><span>{premiumLock ? getNextRenewal() : "---"}</span></p>
         </div>
       </div>

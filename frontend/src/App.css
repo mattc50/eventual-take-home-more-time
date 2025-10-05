@@ -54,7 +54,7 @@ body {
 
 .card {
   border-radius: 24px;
-  padding: 32px;
+  padding: 16px;
   border: 1px solid #EAEAEA;
 }
 
@@ -153,7 +153,7 @@ body {
   line-height: 20px;
   letter-spacing: -1%;
   color: #8F8F8F;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .display-value {
