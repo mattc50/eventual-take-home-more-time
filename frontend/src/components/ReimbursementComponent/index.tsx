@@ -2,21 +2,21 @@ import { useEffect, useState } from "react";
 
 const ReimbursementComponent = ({ property }) => {
 
-  const API_URL = "https://take-home-backend-8bcf0f61c18e.herokuapp.com";
+  // const API_URL = "https://take-home-backend-8bcf0f61c18e.herokuapp.com";
 
   const [propertyData, setPropertyData] = useState({})
 
-  useEffect(() => {
-    if(property) {
-    fetch(`${API_URL}/properties/${property.id}/premium-lock`)
-      .then(res => res.json())
-      .then(data => {
-        setPropertyData(data);
-      });
-    }
-  }, [property])
+  // useEffect(() => {
+  //   if(property) {
+  //   fetch(`${API_URL}/properties/${property.id}/premium-lock`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setPropertyData(data);
+  //     });
+  //   }
+  // }, [property])
 
-  console.log(propertyData);
+  // console.log(propertyData);
 
   return (
     <div className="card">
