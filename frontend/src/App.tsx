@@ -63,7 +63,7 @@ function App() {
   return (
     <div className="dashboard-content">
       <div className="top-nav">
-        <h1>Homeowners Dashboard</h1>
+        <h1 className="dashboard-h1">Homeowners Dashboard</h1>
         <AddressBar properties={properties} />
       </div>
       <InfoBar premiumLock={propertyData.premiumLock}/>
