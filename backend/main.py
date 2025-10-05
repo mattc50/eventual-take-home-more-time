@@ -23,6 +23,16 @@ properties = [
       "square_footage":2500,
       "year_built":2015,
       "property_type":"single_family"
+    },
+    {
+      "id":"prop-002",
+      "address":"123 Plumcore Road",
+      "city":"New York",
+      "state":"NY",
+      "zip_code":"10001",
+      "square_footage":1500,
+      "year_built":2020,
+      "property_type":"multi_family"
     }
 ]
 

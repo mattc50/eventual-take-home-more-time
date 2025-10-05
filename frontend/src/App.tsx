@@ -40,7 +40,7 @@ function App() {
     fetchProperties()
       .then((data) => {
         setProperties(data);
-        if(data.length > 0) setSelectedPropertyId(data[0].id);
+        if(data.length > 0) setSelectedPropertyId(data[1].id);
       })
       .catch(console.error)
   }, []);
