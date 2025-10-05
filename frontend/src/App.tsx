@@ -67,7 +67,7 @@ function App() {
         <AddressBar properties={properties} />
       </div>
       <InfoBar premiumLock={propertyData.premiumLock}/>
-      {/* <ReimbursementComponent /> */}
+      <ReimbursementComponent premiumLock={propertyData.premiumLock}/>
       {/* <PremiumsTracker /> */}
     </div>
   )

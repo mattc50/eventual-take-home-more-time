@@ -1,33 +1,18 @@
-import { useEffect, useState } from "react";
+import { formatAsCurrency } from "../../utils/formatAsCurrency";
 
-const ReimbursementComponent = ({ property }) => {
-
-  // const API_URL = "https://take-home-backend-8bcf0f61c18e.herokuapp.com";
-
-  const [propertyData, setPropertyData] = useState({})
-
-  // useEffect(() => {
-  //   if(property) {
-  //   fetch(`${API_URL}/properties/${property.id}/premium-lock`)
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       setPropertyData(data);
-  //     });
-  //   }
-  // }, [property])
-
-  // console.log(propertyData);
+const ReimbursementComponent = ({ premiumLock }) => {
 
   return (
     <div className="card">
       <p className="card-title">Premium Lock Reimbursement</p>
-      {/* <p>{propertyData?.reimbursement_to_date || "Hello"}</p> */}
       <div className="reimbursement-text">
-        <p className="large-text prediction">$1,047.23</p>
-        <p className="small-text prediction">$2,189</p>
+        <p className="large-text prediction">{premiumLock?.reimbursement_to_date}</p>
+        <p className="small-text prediction">{premiumLock ? formatAsCurrency(premiumLock?.premium_prediction): "$0.00"}</p>
       </div>
       <div className="reimbursement-bar">
-        <div className="reimbursement-fill"></div>
+        <div className="reimbursement-fill" style={{
+          width: premiumLock ? (premiumLock.reimbursement_to_date / premiumLock.max_reimbursement) * 100 : 0
+        }}></div>
       </div>
     </div>
   )

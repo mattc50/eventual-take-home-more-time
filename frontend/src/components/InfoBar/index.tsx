@@ -1,3 +1,5 @@
+import { formatAsCurrency } from "../../utils/formatAsCurrency";
+
 const InfoBar = ({ premiumLock }) => {
 
   const getRenewalDates = () => {
@@ -45,17 +47,10 @@ const InfoBar = ({ premiumLock }) => {
           <p className="display-label">Insurance Premiums Prediction</p>
           <p className="display-value">
             <span className="prediction-value">
-              {premiumLock?.premium_prediction.toLocaleString(
-                'en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                }
-              ) || "---"}
+              {premiumLock ? formatAsCurrency(premiumLock?.premium_prediction) : "---"}
             </span>
             {/* double-check if this is the right implementation */}
-            {premiumLock.renewal_1_date && ` in ${getEndYear(premiumLock?.renewal_1_date)}` }
+            {premiumLock?.renewal_1_date && ` in ${getEndYear(premiumLock?.renewal_1_date)}` }
           </p>
         </div>
         <div className="display-data">
