@@ -58,6 +58,10 @@ body {
   border: 1px solid #EAEAEA;
 }
 
+.card.large-padding {
+  padding: 24px;
+}
+
 .card-title {
   font-family: Aeonik;
   font-weight: 500;
@@ -84,7 +88,7 @@ body {
 
 .reimbursement-fill {
   height: 100%;
-  background: linear-gradient(90deg,#16C64F 0%, #87F0D0 100%);
+  background: linear-gradient(90deg,#16C64F 0%, #B4EDC7 100%);
 }
 
 .bars-container {
@@ -93,6 +97,7 @@ body {
   display: flex;
   gap: 16px;
   align-items: flex-end;
+  margin-top: 24px;
 }
 
 .bar-container {
@@ -107,14 +112,18 @@ body {
 }
 
 .bar {
+  transition: height 0.3s ease;
   border-radius: 24px;
   width: 100%;
   background: #EAEAEA;
 }
 
+.bar.past-threshold {
+  background: #14B247;
+}
+
 .bar:hover {
   background: #14B247;
-  transition: 0.3s;
 }
 
 .bar.bar-null {
@@ -187,4 +196,39 @@ body {
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 1%;
+}
+
+.prediction-line-container {
+  position: absolute;
+  width: calc(100% - 8px);
+  margin-right: 8px;
+  /* transform: translateY(-50%) undoes mix-blend-mode effect */
+}
+
+.prediction-line {
+  position: relative;
+  width: 100%;
+}
+
+.prediction-line-blend {
+  background: #B4EDC7;
+  height: 4px;
+  width: 100%;
+  mix-blend-mode: multiply;
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+
+.prediction-line-label {
+  position: absolute;
+  transform: translateY(calc(-50% - 2px));
+  font-family: Aeonik;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 1%;
+  color: white;
+  background: #16C64F;
+  border-radius: 4px;
+  padding: 4px;
 }

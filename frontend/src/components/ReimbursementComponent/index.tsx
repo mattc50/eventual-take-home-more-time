@@ -3,7 +3,7 @@ import { formatAsCurrency } from "../../utils/formatAsCurrency";
 const ReimbursementComponent = ({ premiumLock }) => {
 
   return (
-    <div className="card">
+    <div className="card large-padding">
       <p className="card-title">Premium Lock Reimbursement</p>
       <div className="reimbursement-text">
         <p className="large-text prediction">{premiumLock?.reimbursement_to_date}</p>

@@ -68,7 +68,10 @@ function App() {
       </div>
       <InfoBar premiumLock={propertyData.premiumLock}/>
       <ReimbursementComponent premiumLock={propertyData.premiumLock}/>
-      {/* <PremiumsTracker /> */}
+      <PremiumsTracker
+        premiumLock={propertyData.premiumLock}
+        history={propertyData.reimbursementHistory}
+      />
     </div>
   )
 }
