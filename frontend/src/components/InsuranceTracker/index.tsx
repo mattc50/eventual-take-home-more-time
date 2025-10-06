@@ -42,7 +42,6 @@ const PremiumsTracker = ({ premiumLock, history }) => {
 
   const getBarHeight = (premium) => {
     const maxPremium = getMaxPremium();
-    console.log(maxPremium);
     const height = (premium / maxPremium) * MAX_BAR_HEIGHT;
     return height;
   }

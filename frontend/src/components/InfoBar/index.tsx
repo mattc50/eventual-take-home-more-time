@@ -4,15 +4,13 @@ import { getRenewalDates } from "../../utils/getRenewalDates";
 const InfoBar = ({ premiumLock }) => {
   const getNextRenewal = () => {
     const dates = getRenewalDates(premiumLock);
-    console.log(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
     const activeDate = new Date(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
-    console.log(activeDate);
 
     let nextDate = null;
     if (activeDate) {
-      for(const date of dates) {
+      for (const date of dates) {
         const d = new Date(date);
-        if(activeDate < d) {
+        if (activeDate < d) {
           nextDate = date;
         } else {
           nextDate = activeDate;
@@ -41,7 +39,7 @@ const InfoBar = ({ premiumLock }) => {
               {premiumLock ? formatAsCurrency(premiumLock?.premium_prediction) : "---"}
             </span>
             {/* double-check if this is the right implementation */}
-            {premiumLock?.renewal_1_date && ` in ${getEndYear(premiumLock?.renewal_1_date)}` }
+            {premiumLock?.renewal_1_date && ` in ${getEndYear(premiumLock?.renewal_1_date)}`}
           </p>
         </div>
         <div className="display-data">

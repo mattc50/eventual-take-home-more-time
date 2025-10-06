@@ -13,6 +13,11 @@
   src: url('./assets/fonts/AeonikTRIAL-SemiBold.otf');
 }
 
+@font-face {
+  font-family: 'Aeonik Bold';
+  src: url('./assets/fonts/AeonikTRIAL-Bold.otf');
+}
+
 p, h1, h2, h3 {
   margin: 0;
 }
@@ -214,7 +219,8 @@ body {
   color: #16C64F;
 }
 
-.properties-container {
+.properties-dropdown-select {
+  margin-top: 8px;
   padding: 8px 16px;
   display: flex;
   gap: 8px;
@@ -223,7 +229,7 @@ body {
   border: 1px solid #EAEAEA;
 }
 
-.properties-container:hover {
+.properties-dropdown-select:hover {
   border-color: #191919;
 }
 
@@ -233,6 +239,46 @@ body {
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 1%;
+}
+
+.dropdown-container {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 300px;
+  max-width: 300px;
+  border-radius: 12px;
+  border: 1px solid #191919;
+  padding: 12px;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding-bottom: 12px;
+}
+
+.dropdown-item:hover .properties-text {
+  font-family: 'Aeonik Bold';
+  text-overflow: ellipsis;
+}
+
+.properties-container {
+  position: relative;
+}
+
+.dropdown-button {
+  margin-top: 4px;
+  appearance: none;
+  background: #191919;
+  color: white;
+  font-family: 'Aeonik Medium';
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -1%;
+  padding: 4px;
+  border-radius: 8px;
+  width: 100%;
 }
 
 .prediction-line-container {

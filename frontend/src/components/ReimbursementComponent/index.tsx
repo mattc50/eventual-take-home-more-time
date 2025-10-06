@@ -90,7 +90,7 @@ const SlidingDigit = ({ children, entering, exiting }) => {
 };
 
 const ReimbursementComponent = ({ premiumLock }) => {
-  const [reimbursement, setReimbursement] = useState(0.0);
+  const [reimbursement, setReimbursement] = useState(0.00);
   const prevDigitsRef = useRef<string[]>([]);
 
   useEffect(() => {
@@ -99,14 +99,15 @@ const ReimbursementComponent = ({ premiumLock }) => {
     }
   }, [premiumLock?.reimbursement_to_date]);
 
-  const valStr = reimbursement.toFixed(2);
+  const valStr = reimbursement.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   const digits = valStr.split("");
 
   const prevDigits = prevDigitsRef.current;
 
   // Compare previous and current digits to detect entering/exiting
   const renderDigits = digits.map((char, index) => {
-    if (char === ".") return <span key={`decimal-${index}`}>.</span>;
+    if (char === ".") return <span className="large-text display-number" key={`decimal-${index}`}>.</span>;
+    if (char === ",") return <span className="large-text display-number" key={`decimal-${index}`}>,</span>;
 
     const prevChar = prevDigits[index];
     const entering = !prevChar && prevDigits.length < digits.length;
@@ -154,15 +155,6 @@ const ReimbursementComponent = ({ premiumLock }) => {
           }}
         ></div>
       </div>
-      <button
-        onClick={() => {
-          if (reimbursement === 1100.27)
-            setReimbursement(premiumLock?.reimbursement_to_date);
-          else setReimbursement(1100.27);
-        }}
-      >
-        Press
-      </button>
     </div>
   );
 };

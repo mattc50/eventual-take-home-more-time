@@ -6,7 +6,6 @@ import ReimbursementComponent from './components/ReimbursementComponent';
 import PremiumsTracker from './components/InsuranceTracker';
 
 function App() {
-  console.log('render');
   const API_URL = "http://127.0.0.1:8000"
 
   const [properties, setProperties] = useState([]);
@@ -36,12 +35,12 @@ function App() {
     const res = await fetch(`${API_URL}/properties/${id}/renewal-dates`);
     return res.json();
   };
-  
+
   useEffect(() => {
     fetchProperties()
       .then((data) => {
         setProperties(data);
-        if(data.length > 0) setSelectedPropertyId(data[1].id);
+        if (data.length > 0 && selectedPropertyId === "") setSelectedPropertyId(data[1].id);
       })
       .catch(console.error)
   }, []);
@@ -54,10 +53,10 @@ function App() {
       fetchPropertyReimbursementHistory(selectedPropertyId),
       fetchPropertyRenewalDates(selectedPropertyId)
     ])
-        .then(([premiumLock, reimbursementHistory, renewalDates]) => {
-      setPropertyData({ premiumLock, reimbursementHistory, renewalDates });
-    })
-        .catch(console.error)
+      .then(([premiumLock, reimbursementHistory, renewalDates]) => {
+        setPropertyData({ premiumLock, reimbursementHistory, renewalDates });
+      })
+      .catch(console.error)
   }, [selectedPropertyId]);
 
 
@@ -65,10 +64,10 @@ function App() {
     <div className="dashboard-content">
       <div className="top-nav">
         <h1 className="dashboard-h1">Homeowners Dashboard</h1>
-        <AddressBar properties={properties} />
+        <AddressBar properties={properties} setPropertyId={setSelectedPropertyId} />
       </div>
-      <InfoBar premiumLock={propertyData.premiumLock}/>
-      <ReimbursementComponent premiumLock={propertyData.premiumLock}/>
+      <InfoBar premiumLock={propertyData.premiumLock} />
+      <ReimbursementComponent premiumLock={propertyData.premiumLock} />
       <PremiumsTracker
         premiumLock={propertyData.premiumLock}
         history={propertyData.reimbursementHistory}
