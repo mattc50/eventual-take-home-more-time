@@ -1,3 +1,6 @@
+# Final Product
+![](./assets/Screen%20Recording%202025-10-06%20at%203.34.41 AM.mov)
+
 # Where I left off with the assignment
 First, I want to highlight what was already in my mind after completing the 2-hour assignment, and what I knew I wanted to do with more time. My intent is to do all of this top-of-mind and be able to explain decisions, but will indicate when further investigation is done.
 - **Data fetching:** Resolve the issues I was facing with data fetching, and be able to render actual data in the app.
