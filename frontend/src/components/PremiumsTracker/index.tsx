@@ -1,8 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { formatAsCurrency } from "../../utils/formatAsCurrency";
-import { getRenewalDates } from "../../utils/getRenewalDates";
+import type { PremiumLock } from "../../App";
 
-const PremiumsTracker = ({ premiumLock, history }) => {
+type PremiumsTrackerProps = {
+  premiumLock: PremiumLock | null
+}
+type BarProps = {
+  premium: number | undefined,
+  label: string,
+  pastThreshold: boolean,
+  active: boolean,
+  index: number
+}
+
+const PremiumsTracker = ({ premiumLock }: PremiumsTrackerProps) => {
   const MAX_BAR_HEIGHT = 300;
 
   const barInfo = [
@@ -25,7 +36,7 @@ const PremiumsTracker = ({ premiumLock, history }) => {
   ]
 
   const getMaxPremium = () => {
-    let premiums = [];
+    const premiums: number[] = [];
     if (premiumLock && premiumLock?.origination_premium)
       premiums.push(premiumLock?.origination_premium);
     if (premiumLock && premiumLock?.year_1_premium)
@@ -40,7 +51,7 @@ const PremiumsTracker = ({ premiumLock, history }) => {
     return maxPremium;
   }
 
-  const getBarHeight = (premium) => {
+  const getBarHeight = (premium: number) => {
     const maxPremium = getMaxPremium();
     const height = (premium / maxPremium) * MAX_BAR_HEIGHT;
     return height;
@@ -52,20 +63,20 @@ const PremiumsTracker = ({ premiumLock, history }) => {
     return y;
   }
 
-  const dates = getRenewalDates(premiumLock);
-
-  const Bar = ({ premium, label, pastThreshold, active, index }) => {
+  const Bar = ({ premium, label, pastThreshold, active, index }: BarProps) => {
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
     const [visible, setVisible] = useState(false);
-    const rectRef = useRef(null);
+    const rectRef = useRef<HTMLDivElement>(null);
 
     const [mounted, setMounted] = useState(false);
 
-    const handleMouseMove = (e) => {
-      const rect = rectRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      setTooltipPos({ x, y });
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if(rectRef.current) {
+        const rect = rectRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        setTooltipPos({ x, y });
+      }
     };
 
 
@@ -79,7 +90,7 @@ const PremiumsTracker = ({ premiumLock, history }) => {
           ref={rectRef}
           className={`bar${pastThreshold ? " past-threshold" : ""}`}
           style={{
-            height: mounted ? `${getBarHeight(premium)}px` : "0px",
+            height: mounted ? `${premium !== undefined ? getBarHeight(premium) : 0}px` : "0px",
             transitionDelay: `calc(${index} * 0.1s)`
           }}
           onMouseEnter={() => setVisible(true)}
@@ -113,10 +124,11 @@ const PremiumsTracker = ({ premiumLock, history }) => {
       <div className="bars-container">
         {barInfo.map((bar, index) => (
           <Bar
+            key={index}
             index={index}
             premium={bar.premium}
             label={bar.label}
-            pastThreshold={premiumLock ? bar.premium >= premiumLock?.max_reimbursement : false}
+            pastThreshold={premiumLock ? (bar.premium ?? 0) >= (premiumLock.max_reimbursement ?? 0) : false}
             active={premiumLock ? index + 1 === premiumLock?.active_year : false}
           />
         ))}

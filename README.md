@@ -1,6 +1,43 @@
 # Final Product
 Demo video: https://drive.google.com/file/d/1efqTrQquZVVTBUQZpaY7DnoR6-ZJupfV/view?usp=sharing
 
+# Setup Instructions
+1. Clone the repository
+2. Set up the backend
+   1. Navigate to the backend repository
+       - `cd backend`
+   2. Create and activate the virtual environment
+       -  For Mac:
+          - `python3 -m venv venv`
+          - `source venv/bin/activate`
+       - For Windows:
+          - `python -m venv venv`
+          - `.\venv\Scripts\Activate.ps1`
+   3. Install FastAPI Uvicorn
+       - `pip install fastapi uvicorn`
+   4. Start the development server (will run on `http://127.0.0.1:8000`)
+       - `uvicorn main:app --reload`
+
+
+3. Set up the frontend
+   1. Navigate to the frontend repository
+       - `cd frontend` (from `backend` : `cd ../frontend`)
+   2. Install project dependencies
+       - `npm install`
+   3. Spin up the frontend
+       - `npm run dev`
+
+# What I ended up implementing
+Continuing where I left off from the assignment submission, I completed the following:
+- Implemented a local FastAPI backend using the assignemnt schema 
+- Proper data fetching and propagation (fetched at top of Dashboard, passed via props as needed)
+- Nearly all interactions required by the interface specifications
+- Found and downloaded the trial version of Aeonik to provide a more accurate look and feel
+
+Pending items remaining:
+- Introduce loading states (the data persists with its previous state for a bit while the new data is fetched)
+- Fix the number animation (remains a complex interaction, involving tracking of numbers from right to left (trying to keep ones that don't change); having ones that _do_ change have the appropriate transition effect; and having ones that need to be added/removed have their approproate transition effect)
+
 # Where I left off with the assignment
 First, I want to highlight what was already in my mind after completing the 2-hour assignment, and what I knew I wanted to do with more time. My intent is to do all of this top-of-mind and be able to explain decisions, but will indicate when further investigation is done.
 - **Data fetching:** Resolve the issues I was facing with data fetching, and be able to render actual data in the app.
@@ -20,5 +57,7 @@ I anticipate needing to do a deeper dive into the following, but will share my t
   3. As the numbers are changing, blur the component.
   4. Add a slight bounce to resolve the animation (I have done this before with a `bezier` in a previous project), but will need to re-assess that to see what specifically leads to the "bounce".
 
-  # Timeline
-  My goal is to have this done in a few hours **on Sunday, October 5** (the day after my birthday!).
+# Timeline
+My goal is to have this done in a few hours **on Sunday, October 5** (the day after my birthday!).
+
+At the end of the day, if anythng, it was a great learning experience!

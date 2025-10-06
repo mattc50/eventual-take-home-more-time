@@ -1,7 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { formatAsCurrency } from "../../utils/formatAsCurrency";
+import type { PremiumLock } from "../../App";
 
-const DisplayNumber = ({ target }) => {
+type DisplayNumberProps = {
+  target: number
+}
+
+type SlidingDigitProps = {
+  children: ReactNode,
+  entering: boolean,
+  exiting: boolean,
+}
+
+type ReimbursementComponentProps = {
+  premiumLock: PremiumLock | null
+}
+
+const DisplayNumber = ({ target }: DisplayNumberProps) => {
   const prevRef = useRef(target);
   const [direction, setDirection] = useState(-1);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -56,7 +71,7 @@ const DisplayNumber = ({ target }) => {
   );
 };
 
-const SlidingDigit = ({ children, entering, exiting }) => {
+const SlidingDigit = ({ children, entering, exiting }: SlidingDigitProps) => {
   const [isMounted, setIsMounted] = useState(true);
 
   // Unmount after exit animation
@@ -89,7 +104,7 @@ const SlidingDigit = ({ children, entering, exiting }) => {
   );
 };
 
-const ReimbursementComponent = ({ premiumLock }) => {
+const ReimbursementComponent = ({ premiumLock }: ReimbursementComponentProps) => {
   const [reimbursement, setReimbursement] = useState(0.00);
   const prevDigitsRef = useRef<string[]>([]);
 
@@ -111,7 +126,7 @@ const ReimbursementComponent = ({ premiumLock }) => {
 
     const prevChar = prevDigits[index];
     const entering = !prevChar && prevDigits.length < digits.length;
-    const exiting = prevChar && !digits[index];
+    const exiting = !!prevChar && !digits[index];
 
     return (
       <SlidingDigit

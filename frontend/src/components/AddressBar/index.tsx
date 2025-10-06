@@ -1,37 +1,52 @@
 import { useEffect, useRef, useState } from "react";
+import type { Property } from "../../App";
 
-const AddressBar = ({ properties, propertyId, setPropertyId }) => {
+type AddressBarProps = {
+  properties: Property[],
+  propertyId: string,
+  setPropertyId: React.Dispatch<React.SetStateAction<string>>
+}
+
+const AddressBar = ({ properties, propertyId, setPropertyId }: AddressBarProps) => {
   const [open, setOpen] = useState(false)
-  const [property, setProperty] = useState(null);
-  const ref = useRef(null);
+  const [property, setProperty] = useState<Property | undefined>(undefined);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
-    console.log(properties);
     if(properties) {
       const property = properties.find((p) => p.id === propertyId)
-      console.log(property)
       setProperty(property);
     }
   }, [properties, propertyId])
 
-  const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setOpen(false);
-    }
-  };
+  const handleClickOutside = (e: MouseEvent) => {
+  if (
+    dropdownRef.current &&
+    !dropdownRef.current.contains(e.target as Node) && // outside dropdown
+    !(buttonRef.current && buttonRef.current.contains(e.target as Node)) // ignore button
+  ) {
+    setOpen(false);
+  }
+};
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mouseup", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mouseup", handleClickOutside);
     };
   }, []);
 
   return (
     <div className="properties-container">
       <div
+        ref={buttonRef}
         tabIndex={0}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((prev) => !prev)
+        }}
         className="properties-dropdown-select"
       >
         <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,14 +55,18 @@ const AddressBar = ({ properties, propertyId, setPropertyId }) => {
         <p className="properties-text">
           {property ? `${property?.address}, ${property?.city}, ${property?.state}` : "---"}
         </p>
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0.889526 1.20711L4.18243 4.50001C4.57293 4.89051 5.20613 4.89051 5.59663 4.50001L8.88953 1.20711" stroke="#191919" stroke-linecap="round" stroke-linejoin="round" />
+        <svg style={{transform: open ? "rotate(180deg)" : "none"}} width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.889526 1.20711L4.18243 4.50001C4.57293 4.89051 5.20613 4.89051 5.59663 4.50001L8.88953 1.20711" stroke="#191919" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
       {open && (
-        <div ref={ref} className="dropdown-container">
+        <div
+          ref={dropdownRef}
+          className="dropdown-container"
+        >
           {properties.map((property, index) => (
             <div
+              key={index}
               className="dropdown-item"
               tabIndex={0}
               onClick={() => {

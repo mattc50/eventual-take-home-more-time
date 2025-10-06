@@ -1,10 +1,16 @@
 import { formatAsCurrency } from "../../utils/formatAsCurrency";
 import { getRenewalDates } from "../../utils/getRenewalDates";
+import type { PremiumLock } from "../../App";
 
-const InfoBar = ({ premiumLock }) => {
+type InfoBarProps = {
+  premiumLock: PremiumLock | null,
+}
+
+const InfoBar = ({ premiumLock }: InfoBarProps) => {
   const getNextRenewal = () => {
     const dates = getRenewalDates(premiumLock);
-    const activeDate = new Date(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
+    const key = `renewal_${premiumLock?.active_year}_date` as keyof typeof premiumLock;
+    const activeDate = new Date(`${premiumLock?.[key] ?? ""}T00:00`);
 
     let nextDate = null;
     if (activeDate) {
@@ -25,7 +31,7 @@ const InfoBar = ({ premiumLock }) => {
     });
   };
 
-  const getEndYear = (date) => (
+  const getEndYear = (date: string) => (
     new Date(date).getFullYear() + 3
   )
 
