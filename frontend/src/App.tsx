@@ -40,7 +40,7 @@ function App() {
     fetchProperties()
       .then((data) => {
         setProperties(data);
-        if (data.length > 0 && selectedPropertyId === "") setSelectedPropertyId(data[1].id);
+        if (data.length > 0 && selectedPropertyId === "") setSelectedPropertyId(data[0].id);
       })
       .catch(console.error)
   }, []);
@@ -61,18 +61,24 @@ function App() {
 
 
   return (
-    <div className="dashboard-content">
+    <>
       <div className="top-nav">
         <h1 className="dashboard-h1">Homeowners Dashboard</h1>
-        <AddressBar properties={properties} setPropertyId={setSelectedPropertyId} />
+        <AddressBar
+          properties={properties}
+          propertyId={selectedPropertyId}
+          setPropertyId={setSelectedPropertyId}
+        />
       </div>
-      <InfoBar premiumLock={propertyData.premiumLock} />
-      <ReimbursementComponent premiumLock={propertyData.premiumLock} />
-      <PremiumsTracker
-        premiumLock={propertyData.premiumLock}
-        history={propertyData.reimbursementHistory}
-      />
-    </div>
+      <div className="dashboard-content">
+        <InfoBar premiumLock={propertyData.premiumLock} />
+        <ReimbursementComponent premiumLock={propertyData.premiumLock} />
+        <PremiumsTracker
+          premiumLock={propertyData.premiumLock}
+          history={propertyData.reimbursementHistory}
+          />
+      </div>
+    </>
   )
 }
 
