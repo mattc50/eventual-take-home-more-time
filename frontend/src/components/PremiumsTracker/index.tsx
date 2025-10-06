@@ -1,22 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { formatAsCurrency } from "../../utils/formatAsCurrency";
 import type { PremiumLock } from "../../App";
 
 type PremiumsTrackerProps = {
   premiumLock: PremiumLock | null
 }
-type BarProps = {
-  premium: number | undefined,
-  label: string,
-  pastThreshold: boolean,
-  active: boolean,
-  index: number
-}
+
+type BarInfo = {
+  premium: number | undefined;
+  label: string;
+};
 
 const PremiumsTracker = ({ premiumLock }: PremiumsTrackerProps) => {
-  const MAX_BAR_HEIGHT = 300;
+  const MAX_BAR_HEIGHT = 244;
+  const barsContainerRef = useRef<HTMLDivElement>(null);
 
-  const barInfo = [
+  const barInfo: BarInfo[] = [
     {
       premium: premiumLock?.origination_premium,
       label: "Origination"
@@ -63,75 +62,74 @@ const PremiumsTracker = ({ premiumLock }: PremiumsTrackerProps) => {
     return y;
   }
 
-  const Bar = ({ premium, label, pastThreshold, active, index }: BarProps) => {
-    const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-    const [visible, setVisible] = useState(false);
-    const rectRef = useRef<HTMLDivElement>(null);
+  const [tooltip, setTooltip] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    label?: string;
+    value?: number;
+    active?: boolean;
+    pastThreshold?: boolean;
+  }>({ visible: false, x: 0, y: 0 });
 
-    const [mounted, setMounted] = useState(false);
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLDivElement>,
+    label: string,
+    value: number,
+    pastThreshold: boolean,
+    active: boolean
+  ) => {
+    if (!barsContainerRef.current) return;
+    const rect = barsContainerRef.current.getBoundingClientRect();
+    setTooltip({
+      visible: true,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      label,
+      value,
+      pastThreshold,
+      active
+    });
+  };
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if(rectRef.current) {
-        const rect = rectRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        setTooltipPos({ x, y });
-      }
-    };
-
-
-    useEffect(() => {
-      setMounted(true); // triggers re-render
-    }, []);
-
-    return (
-      <div className="bar-container">
-        <div
-          ref={rectRef}
-          className={`bar${pastThreshold ? " past-threshold" : ""}`}
-          style={{
-            height: mounted ? `${premium !== undefined ? getBarHeight(premium) : 0}px` : "0px",
-            transitionDelay: `calc(${index} * 0.1s)`
-          }}
-          onMouseEnter={() => setVisible(true)}
-          onMouseLeave={() => setVisible(false)}
-          onMouseMove={handleMouseMove}
-        >
-        </div>
-        {premium && visible && (
-          <div
-            className="tooltip"
-            style={{
-              left: tooltipPos.x,
-              top: tooltipPos.y,
-            }}
-          >
-            <p className="small-text">{label}</p>
-            <p className={`tooltip-value${pastThreshold || active ? " tooltip-active" : ""}`}>{formatAsCurrency(premium)}</p>
-          </div>
-        )}
-        {!premium && <div className="bar bar-null"></div>}
-        <p className={`bar-label${active ? " active" : ""}`}>{label}</p>
-      </div>
-    )
-  }
+  const handleMouseLeave = () => {
+    setTooltip((prev) => ({ ...prev, visible: false }));
+  };
 
   return (
     <div className="card large-padding">
       <p className="card-title">
         Insurance Tracker
       </p>
-      <div className="bars-container">
-        {barInfo.map((bar, index) => (
-          <Bar
-            key={index}
-            index={index}
-            premium={bar.premium}
-            label={bar.label}
-            pastThreshold={premiumLock ? (bar.premium ?? 0) >= (premiumLock.max_reimbursement ?? 0) : false}
-            active={premiumLock ? index + 1 === premiumLock?.active_year : false}
-          />
-        ))}
+      <div className="bars-container" ref={barsContainerRef}>
+        {barInfo.map((bar, index) => {
+          const pastThreshold = premiumLock ? (bar.premium ?? 0) >= (premiumLock.max_reimbursement ?? 0) : false;
+          const active = premiumLock ? index + 1 === premiumLock.active_year : false;
+
+          return (
+            <div key={index} className="bar-container">
+              {bar.premium ? (
+                <div
+                  className={`bar${pastThreshold ? " past-threshold" : ""}`}
+                  style={{
+                    height: `${getBarHeight(bar.premium)}px`,
+                    transitionDelay: `calc(${index} * 0.1s)`
+                  }}
+                  onMouseEnter={(e) =>
+                    handleMouseMove(e, bar.label, bar.premium!, pastThreshold, active)
+                  }
+                  onMouseMove={(e) =>
+                    handleMouseMove(e, bar.label, bar.premium!, pastThreshold, active)
+                  }
+                  onMouseLeave={handleMouseLeave}
+                ></div>
+              ) : (
+                <div className="bar bar-null"></div>
+              )}
+              <p className={`bar-label${active ? " active" : ""}`}>{bar.label}</p>
+            </div>
+          );
+        })}
         <div
           className="prediction-line-container"
           style={{ bottom: getLinePosition() }}
@@ -143,8 +141,21 @@ const PremiumsTracker = ({ premiumLock }: PremiumsTrackerProps) => {
             </p>
           </div>
         </div>
+        {tooltip.visible && tooltip.value !== undefined && (
+          <div
+            className="tooltip"
+            style={{
+              left: tooltip.x,
+              top: tooltip.y,
+            }}
+          >
+            <p className="small-text">{tooltip.label}</p>
+            <p className={`tooltip-value${tooltip.pastThreshold || tooltip.active ? " tooltip-active" : ""}`}>
+              {formatAsCurrency(tooltip.value)}
+            </p>
+          </div>
+        )}
       </div>
-
     </div>
   )
 }

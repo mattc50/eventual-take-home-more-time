@@ -1,21 +1,29 @@
 @font-face {
-  font-family: 'Aeonik Regular';
+  font-family: 'Aeonik';
   src: url('./assets/fonts/AeonikTRIAL-Regular.otf');
+  font-weight: 400;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   src: url('./assets/fonts/AeonikTRIAL-Medium.otf');
+  font-weight: 500;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Aeonik SemiBold';
+  font-family: 'Aeonik';
   src: url('./assets/fonts/AeonikTRIAL-SemiBold.otf');
+  font-weight: 600;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Aeonik Bold';
+  font-family: 'Aeonik';
   src: url('./assets/fonts/AeonikTRIAL-Bold.otf');
+  font-weight: 700;
+  font-display: swap;
 }
 
 p, h1, h2, h3 {
@@ -27,7 +35,7 @@ body {
 }
 
 .dashboard-h1 {
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   font-weight: 500;
   font-size: 20px;
   line-height: 20px;
@@ -52,7 +60,7 @@ body {
 
 .large-text {
   height: 34px;
-  font-family: 'Aeonik SemiBold';
+  font-family: 'Aeonik';
   font-weight: 600;
   font-size: 48px;
   line-height: 20px;
@@ -68,7 +76,7 @@ body {
 }
 
 .small-text {
-  font-family: 'Aeonik Regular';
+  font-family: 'Aeonik';
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
@@ -77,7 +85,7 @@ body {
 }
 
 .tooltip-value {
-  font-family: 'Aeonik Semibold';
+  font-family: 'Aeonik';
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -106,7 +114,7 @@ body {
 }
 
 .card-title {
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
@@ -136,11 +144,11 @@ body {
 
 .bars-container {
   position: relative;
-  height: 336px;
+  height: 280px;
   display: flex;
   gap: 16px;
   align-items: flex-end;
-  margin-top: 24px;
+  margin-top: 80px;
 }
 
 .bar-container {
@@ -176,7 +184,7 @@ body {
 }
 
 .bar-label {
-  font-family: 'Aeonik Regular';
+  font-family: 'Aeonik';
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
@@ -199,7 +207,7 @@ body {
 
 .display-label {
   font-weight: 400;
-  font-family: 'Aeonik Regular';
+  font-family: 'Aeonik';
   font-size: 14px;
   line-height: 20px;
   letter-spacing: -1%;
@@ -209,7 +217,7 @@ body {
 
 .display-value {
   font-weight: 500;
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -1%;
@@ -241,7 +249,7 @@ body {
 }
 
 .properties-text {
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
@@ -269,7 +277,7 @@ body {
 }
 
 .dropdown-item:hover .properties-text {
-  font-family: 'Aeonik Bold';
+  font-weight: 700;
   text-overflow: ellipsis;
 }
 
@@ -283,7 +291,7 @@ body {
   cursor: pointer;
   background: #191919;
   color: white;
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -318,7 +326,7 @@ body {
 .prediction-line-label {
   position: absolute;
   transform: translateY(calc(-50% - 2px));
-  font-family: 'Aeonik Medium';
+  font-family: 'Aeonik';
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -359,5 +367,5 @@ body {
   background-color: white;
   border-radius: 8px;
   pointer-events: none;
-  transform: translate(calc(-50% + 8px), calc(-100% - 6px));
+  transform: translate(-50%, calc(-100% - 6px));
 }
