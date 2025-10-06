@@ -35,7 +35,6 @@ const PremiumsTracker = ({ premiumLock, history }) => {
     if (premiumLock && premiumLock.max_reimbursement)
       premiums.push(premiumLock?.max_reimbursement);
     const maxPremium = premiums.sort((a, b) => a - b)[premiums.length - 1];
-    console.log(maxPremium);
     return maxPremium;
   }
 
@@ -52,7 +51,6 @@ const PremiumsTracker = ({ premiumLock, history }) => {
   }
 
   const Bar = ({ premium, label, pastThreshold, active }) => {
-    console.log(pastThreshold)
     return (
       <div className="bar-container">
         {premium ? (

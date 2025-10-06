@@ -6,6 +6,7 @@ import ReimbursementComponent from './components/ReimbursementComponent';
 import PremiumsTracker from './components/InsuranceTracker';
 
 function App() {
+  console.log('render');
   const API_URL = "http://127.0.0.1:8000"
 
   const [properties, setProperties] = useState([]);

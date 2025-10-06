@@ -1,7 +1,16 @@
 @font-face {
-  font-family: 'Aeonik';
+  font-family: 'Aeonik Regular';
   src: url('./assets/fonts/AeonikTRIAL-Regular.otf');
-  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Aeonik Medium';
+  src: url('./assets/fonts/AeonikTRIAL-Medium.otf');
+}
+
+@font-face {
+  font-family: 'Aeonik SemiBold';
+  src: url('./assets/fonts/AeonikTRIAL-SemiBold.otf');
 }
 
 p, h1, h2, h3 {
@@ -13,7 +22,7 @@ body {
 }
 
 .dashboard-h1 {
-  font-family: Aeonik;
+  font-family: 'Aeonik Medium';
   font-weight: 500;
   font-size: 20px;
   line-height: 20px;
@@ -37,7 +46,7 @@ body {
 
 .large-text {
   height: 34px;
-  font-family: Aeonik;
+  font-family: 'Aeonik SemiBold';
   font-weight: 600;
   font-size: 48px;
   line-height: 20px;
@@ -45,8 +54,15 @@ body {
   color: #191919;
 }
 
+.large-text-container {
+  display: flex;
+  height: 40px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
 .small-text {
-  font-family: Aeonik;
+  font-family: 'Aeonik Regular';
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
@@ -75,7 +91,7 @@ body {
 }
 
 .card-title {
-  font-family: Aeonik;
+  font-family: 'Aeonik Medium';
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
@@ -145,7 +161,7 @@ body {
 }
 
 .bar-label {
-  font-family: Aeonik;
+  font-family: 'Aeonik Regular';
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
@@ -168,7 +184,7 @@ body {
 
 .display-label {
   font-weight: 400;
-  font-family: Aeonik;
+  font-family: 'Aeonik Regular';
   font-size: 14px;
   line-height: 20px;
   letter-spacing: -1%;
@@ -178,7 +194,7 @@ body {
 
 .display-value {
   font-weight: 500;
-  font-family: Aeonik;
+  font-family: 'Aeonik Medium';
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -1%;
@@ -203,7 +219,7 @@ body {
 }
 
 .properties-text {
-  font-family: Aeonik;
+  font-family: 'Aeonik Medium';
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -234,7 +250,7 @@ body {
 .prediction-line-label {
   position: absolute;
   transform: translateY(calc(-50% - 2px));
-  font-family: Aeonik;
+  font-family: 'Aeonik Medium';
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
@@ -249,8 +265,18 @@ body {
   display: inline-block;
 }
 
+.display-number-container.transitioning {
+  transition: transform 0.5s ease;
+}
+
 .display-number {
+  height: 40px;
   display: block;
   line-height: 40px;
-  text-align: right;
+}
+
+.sliding-digit.exit {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
 }

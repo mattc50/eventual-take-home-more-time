@@ -1,69 +1,170 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatAsCurrency } from "../../utils/formatAsCurrency";
 
-const ReimbursementComponent = ({ premiumLock }) => {
-  const [reimbursement, setReimbursement] = useState(0.00)
+const DisplayNumber = ({ target }) => {
+  const prevRef = useRef(target);
+  const [direction, setDirection] = useState(-1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayValue, setDisplayValue] = useState(target);
+  const [blurAmount, setBlurAmount] = useState(0);
 
   useEffect(() => {
-    if (premiumLock) setReimbursement(premiumLock?.reimbursement_to_date)
-  }, [premiumLock?.reimbursement_to_date])
+    const prevTarget = prevRef.current;
+    if (target === prevTarget) return;
 
-  const DisplayNumber = ({ target, addDollar }) => {
-    console.log(target);
+    const DURATION = 200;
+    const HALF = DURATION / 2;
+
+    setIsTransitioning(true);
+    setDirection(target > prevTarget ? 0 : -2);
+    setBlurAmount(12);
+
+    const halfway = setTimeout(() => {
+      setDisplayValue(target);
+      setBlurAmount(0);
+    }, HALF);
+
+    const end = setTimeout(() => {
+      setIsTransitioning(false);
+      setDirection(-1);
+      prevRef.current = target;
+    }, DURATION);
+
+    return () => {
+      clearTimeout(halfway);
+      clearTimeout(end);
+    };
+  }, [target]);
+
+  return (
+    <span
+      className="display-number-container"
+      style={{
+        transform: `translateY(${direction * 40}px) scale(${
+          direction > -1 ? "0.8" : direction === -1 ? "1" : "1.2"
+        })`,
+        transition: isTransitioning
+          ? "transform 0.4s ease, filter 0.4s ease"
+          : "none",
+        filter: `blur(${blurAmount}px)`,
+      }}
+    >
+      <span className="large-text display-number">{displayValue}</span>
+      <span className="large-text display-number">{displayValue}</span>
+      <span className="large-text display-number">{displayValue}</span>
+    </span>
+  );
+};
+
+const SlidingDigit = ({ children, entering, exiting }) => {
+  const [isMounted, setIsMounted] = useState(true);
+
+  // Unmount after exit animation
+  useEffect(() => {
+    if (exiting) {
+      const timeout = setTimeout(() => setIsMounted(false), 300);
+      return () => clearTimeout(timeout);
+    }
+  }, [exiting]);
+
+  if (!isMounted) return null;
+
+  return (
+    <span
+      className={`sliding-digit ${entering ? "entering" : ""} ${
+        exiting ? "exiting" : ""
+      }`}
+      style={{
+        display: "inline-block",
+        transform: entering
+          ? "translateY(-100%)"
+          : exiting
+          ? "translateY(100%)"
+          : "translateY(0)",
+        transition: "transform 0.3s ease",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const ReimbursementComponent = ({ premiumLock }) => {
+  const [reimbursement, setReimbursement] = useState(0.0);
+  const prevDigitsRef = useRef<string[]>([]);
+
+  useEffect(() => {
+    if (premiumLock && reimbursement !== premiumLock.reimbursement_to_date) {
+      setReimbursement(premiumLock.reimbursement_to_date);
+    }
+  }, [premiumLock?.reimbursement_to_date]);
+
+  const valStr = reimbursement.toFixed(2);
+  const digits = valStr.split("");
+
+  const prevDigits = prevDigitsRef.current;
+
+  // Compare previous and current digits to detect entering/exiting
+  const renderDigits = digits.map((char, index) => {
+    if (char === ".") return <span key={`decimal-${index}`}>.</span>;
+
+    const prevChar = prevDigits[index];
+    const entering = !prevChar && prevDigits.length < digits.length;
+    const exiting = prevChar && !digits[index];
+
     return (
-      <span
-        className="display-number-container"
-        style={{
-          transform: `translateY(calc(-${target} * 40px))`
-        }}
+      <SlidingDigit
+        key={index}
+        entering={entering}
+        exiting={exiting}
       >
-        <span className="display-number">0</span>
-        <span className="display-number">1</span>
-        <span className="display-number">2</span>
-        <span className="display-number">3</span>
-        <span className="display-number">4</span>
-        <span className="display-number">6</span>
-        <span className="display-number">7</span>
-        <span className="display-number">8</span>
-        <span className="display-number">9</span>
-      </span>
-    )
+        <DisplayNumber target={parseInt(char)} />
+      </SlidingDigit>
+    );
+  });
 
-    // Slide up if the digit (in the same spot) is changing to a
-    // greater value
-  }
-
-  const ReimbursementDisplay = ({ val }) => {
-    console.log(val);
-    const valStr = val.toString();
-    const digits = valStr.length;
-    return (
-      Array.from({ length: digits }).map((_, index) => (
-        <DisplayNumber addDollar={index === 0} target={parseInt(valStr[index])} />
-      ))
-    )
-  }
+  // Update previous digits after render
+  useEffect(() => {
+    prevDigitsRef.current = digits;
+  }, [valStr]);
 
   return (
     <div className="card large-padding">
       <p className="card-title">Premium Lock Reimbursement</p>
       <div className="reimbursement-text">
-        <p className="large-text display">
-          <ReimbursementDisplay val={reimbursement} />
+        <div className="large-text-container">
+          <p className="large-text display-number">$</p>
+          {renderDigits}
+        </div>
+        <p className="small-text prediction">
+          {premiumLock
+            ? formatAsCurrency(premiumLock?.premium_prediction)
+            : "$0.00"}
         </p>
-        <p className="small-text prediction">{premiumLock ? formatAsCurrency(premiumLock?.premium_prediction): "$0.00"}</p>
       </div>
       <div className="reimbursement-bar">
-        <div className="reimbursement-fill" style={{
-          width: premiumLock ? (premiumLock.reimbursement_to_date / premiumLock.max_reimbursement) * 100 : 0
-        }}></div>
+        <div
+          className="reimbursement-fill"
+          style={{
+            width: premiumLock
+              ? (premiumLock.reimbursement_to_date /
+                  premiumLock.max_reimbursement) *
+                100
+              : 0,
+          }}
+        ></div>
       </div>
-      <button onClick={() => {
-        if(reimbursement === 1000) setReimbursement(premiumLock?.reimbursement_to_date);
-        else setReimbursement(1000);
-      }}>Press</button>
+      <button
+        onClick={() => {
+          if (reimbursement === 1100.27)
+            setReimbursement(premiumLock?.reimbursement_to_date);
+          else setReimbursement(1100.27);
+        }}
+      >
+        Press
+      </button>
     </div>
-  )
-}
+  );
+};
 
 export default ReimbursementComponent;
