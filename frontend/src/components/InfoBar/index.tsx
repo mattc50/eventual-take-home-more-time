@@ -1,18 +1,9 @@
 import { formatAsCurrency } from "../../utils/formatAsCurrency";
+import { getRenewalDates } from "../../utils/getRenewalDates";
 
 const InfoBar = ({ premiumLock }) => {
-
-  const getRenewalDates = () => {
-    let dates = [];
-    if(premiumLock?.renewal_1_date) dates.push(premiumLock.renewal_1_date);
-    if(premiumLock?.renewal_2_date) dates.push(premiumLock.renewal_2_date);
-    if(premiumLock?.renewal_3_date) dates.push(premiumLock.renewal_3_date);
-    // console.log(dates);
-    return dates;
-  }
-
   const getNextRenewal = () => {
-    const dates = getRenewalDates();
+    const dates = getRenewalDates(premiumLock);
     console.log(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
     const activeDate = new Date(`${premiumLock[`renewal_${premiumLock?.active_year}_date`]}T00:00`);
     console.log(activeDate);
